@@ -5,10 +5,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.escaes.models.Danios;
 import com.escaes.models.enums.Estado;
 import com.escaes.models.enums.Sede;
@@ -29,6 +33,9 @@ public class DanioController {
 
     private DanioRepository dañoRepo;
 
+    @Autowired
+    private Cloudinary cloudinary;
+
     public DanioController(DanioRepository dañoRepo) {
         this.dañoRepo = dañoRepo;
     }
@@ -46,16 +53,15 @@ public class DanioController {
     public String postAddDanios(@RequestParam("imagenFile")MultipartFile imagenFile,Danios danio)throws IOException{
         
 
-        // Guardar la imagen en el directorio usando Paths y Files.write
+        
         if (!imagenFile.isEmpty()) {
-            String nombreImagen = imagenFile.getOriginalFilename();
-            Path rutaImagen = Paths.get("src//main//resources//static/uploads", nombreImagen);
+            Map<?, ?> uploadResult = cloudinary.uploader().upload(imagenFile.getBytes(), ObjectUtils.emptyMap());
 
-            // Escribir el archivo en la ruta
-            Files.write(rutaImagen, imagenFile.getBytes());
+        // Guardar la URL de la imagen en lugar del nombre del archivo
+            String imageUrl = uploadResult.get("secure_url").toString();
 
             // Solo almacenar el nombre de la imagen en la base de datos
-            danio.setImagen(nombreImagen);
+            danio.setImagen(imageUrl);
         }
 
         danio.setFechaReporte(LocalDate.now());

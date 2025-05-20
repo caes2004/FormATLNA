@@ -30,7 +30,7 @@
 
             <div th:if="${danio.imagen != null}">
                 <p><strong>Imagen:</strong></p>
-                <img th:src="@{'/uploads/' + ${danio.imagen}}" class="img-fluid" alt="Imagen del daño" />
+                <img th:src="${danio.imagen}" class="img-fluid" alt="Imagen del daño" />
             </div>
 
             <a href="/reportes" class="btn btn-secondary mt-3">Volver</a>
