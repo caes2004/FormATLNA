@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Daño</title>
+
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Formulario de Reporte de Daño</h4>
+            </div>
+            <div class="card-body">
+
+                <form th:action="@{/}" th:object="${danio}" method="post" enctype="multipart/form-data">
+
+                    <div class="mb-3">
+                        <label for="documentoUsuario" class="form-label">Documento del usuario</label>
+                        <input type="number" class="form-control" th:field="*{documentoUsuario}" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="correoElectronico" class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" th:field="*{correoElectronico}" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="nombreUsuario" class="form-label">Nombre del usuario</label>
+                        <input type="text" class="form-control" th:field="*{nombreUsuario}" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcionDanio" class="form-label">Descripción del daño</label>
+                        <textarea class="form-control" th:field="*{descripcionDanio}" rows="4" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fechaReporte" class="form-label">Fecha de reporte</label>
+                        <input type="date" class="form-control" th:field="*{fechaReporte}" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sede" class="form-label">Sede</label>
+                        <select class="form-select" th:field="*{sede}">
+                            <option th:each="s : ${sedes}" th:value="${s}" th:text="${s}">Sede</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="imagenFile" class="form-label">Imagen</label>
+                        <input type="file" class="form-control" name="imagenFile" accept="image/*" />
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Enviar Reporte</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (opcional, para componentes interactivos) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script th:if="${param.success}">
+        Swal.fire({
+            icon: 'success',
+            title: 'Reporte Creado',
+            text: 'Su Reporte fue registrado correctamente, a su correo le llegarán actulizaciones de su estado.',
+            confirmButtonText: 'OK'
+        });
+    </script>
+
+</body>
+
+</html>
