@@ -1,9 +1,7 @@
 package com.escaes.controllers;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -55,7 +53,7 @@ public class DanioController {
 
         
         if (!imagenFile.isEmpty()) {
-            Map<?, ?> uploadResult = cloudinary.uploader().upload(imagenFile.getBytes(), ObjectUtils.emptyMap());
+            Map<?, ?> uploadResult = cloudinary.uploader().upload(imagenFile.getBytes(), ObjectUtils.asMap("folder","daños"));
 
         // Guardar la URL de la imagen en lugar del nombre del archivo
             String imageUrl = uploadResult.get("secure_url").toString();
