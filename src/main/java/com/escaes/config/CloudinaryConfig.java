@@ -13,7 +13,7 @@ public class CloudinaryConfig {
 
     @Bean
      public Cloudinary cloudinary() {
-        Dotenv dotenv = Dotenv.configure()
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing()
                 .directory(System.getProperty("user.dir"))
                 .filename(".env")
                 .load();
