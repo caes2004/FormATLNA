@@ -1,17 +1,24 @@
-# Usa una imagen ligera de Java (JDK 17, puedes cambiar si usas otra)
-FROM eclipse-temurin:21-jdk-alpine
+# Etapa 1: Construcción del JAR con Maven
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
 
-# Crea el directorio de trabajo
 WORKDIR /app
 
-# Copia el jar compilado (asume que el build ya lo generó)
-COPY target/mi-app.jar app.jar
+# Copiamos el proyecto completo al contenedor
+COPY . .
 
-# Copia el archivo .env al contenedor (para que dotenv lo encuentre)
-##COPY .env .env
+# Compila el proyecto sin ejecutar los tests
+RUN mvn clean package -DskipTests
 
-# Expón el puerto en el que tu app corre (Spring Boot usa 8080 por defecto)
+# Etapa 2: Imagen final ligera con Java 21
+FROM eclipse-temurin:21-jdk-alpine
+
+WORKDIR /app
+
+# Copiamos el .jar desde el contenedor anterior
+COPY --from=builder /app/target/*.jar app.jar
+
+# Exponemos el puerto de Spring Boot
 EXPOSE 8080
 
-# Comando de inicio
+# Ejecutamos la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
