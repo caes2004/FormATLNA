@@ -10,7 +10,7 @@ public class AtlnacionalApplication {
 
 	public static void main(String[] args) {
 
-		Dotenv dotenv = Dotenv.configure()
+		Dotenv dotenv = Dotenv.configure().ignoreIfMissing()
 			.filename(".env")
 			.load();
 
